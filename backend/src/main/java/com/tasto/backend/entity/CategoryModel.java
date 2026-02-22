@@ -18,4 +18,11 @@ public class CategoryModel {
 
     @Column(nullable = false,unique = true)
     private String name;
+
+    @Column
+    private int count;
+
+    @Column(length = 512)
+    private String image;
+
 }

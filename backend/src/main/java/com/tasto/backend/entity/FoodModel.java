@@ -32,7 +32,7 @@ public class FoodModel {
     private boolean isVeg;
     @Column
     private List<String> tags;
-    @Column
+    @Column(length = 512)
     private String image;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -45,6 +45,15 @@ public class FoodModel {
     public boolean getIsVeg()
     {
         return this.isVeg;
+    }
+
+    public void setInStock(boolean inStock)
+    {
+        this.inStock = inStock;
+    }
+    public boolean getInStock()
+    {
+        return this.inStock;
     }
 
 }

@@ -1,16 +1,15 @@
 package com.tasto.backend.dto;
 
-import com.tasto.backend.entity.FoodModel;
+import com.tasto.backend.entity.CategoryModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class FoodResponse {
+public class CategoryResponse {
     private boolean success;
     private String message;
-    private List<FoodModel> food;
+    private List<CategoryModel> category;
 }
