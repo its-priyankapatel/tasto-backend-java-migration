@@ -61,7 +61,7 @@ public class Validator {
             throw new InvalidRequestException("Phone number must be 10 digits");
         }
         String phone=userRequest.getPhone();
-        if(phone.matches("^[0-9]+$"))
+        if(!phone.matches("^[0-9]+$"))
         {
             throw new InvalidRequestException("Phone number must be digits only");
         }

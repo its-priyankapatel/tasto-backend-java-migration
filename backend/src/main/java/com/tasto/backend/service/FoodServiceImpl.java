@@ -109,7 +109,6 @@ public class FoodServiceImpl implements FoodService {
 
         FoodModel updatedFood = foodRepository.save(newFood);
         return new FoodResponse(true,"Food updated successfully",List.of(updatedFood));
-
     }
     @Override
     public FoodResponse deleteFood(Long foodId) {
