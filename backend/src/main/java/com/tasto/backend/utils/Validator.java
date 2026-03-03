@@ -1,6 +1,7 @@
 package com.tasto.backend.utils;
 
 import com.tasto.backend.dto.FoodRequest;
+import com.tasto.backend.dto.RestaurantRequest;
 import com.tasto.backend.dto.UserRequest;
 import com.tasto.backend.exception.InvalidRequestException;
 
@@ -48,6 +49,10 @@ public class Validator {
         {
             throw new InvalidRequestException("Password must be provided");
         }
+        if(userRequest.getRole().equalsIgnoreCase("user"))
+        {
+            throw new InvalidRequestException("Role must be user");
+        }
         if(userRequest.getName().length()<3)
         {
             throw new InvalidRequestException("Name must be least 3 characters");
@@ -61,6 +66,42 @@ public class Validator {
             throw new InvalidRequestException("Phone number must be 10 digits");
         }
         String phone=userRequest.getPhone();
+        if(!phone.matches("^[0-9]+$"))
+        {
+            throw new InvalidRequestException("Phone number must be digits only");
+        }
+    }
+    public static void restaurantValidate(RestaurantRequest restaurantRequest)
+    {
+        if(restaurantRequest.getName()==null || restaurantRequest.getName().isBlank())
+        {
+            throw new InvalidRequestException("Restaurant name is required");
+        }
+        if(restaurantRequest.getEmail()==null || restaurantRequest.getEmail().isBlank())
+        {
+            throw new InvalidRequestException("Restaurant Email is required");
+        }
+        if(restaurantRequest.getPassword()==null || restaurantRequest.getPassword().isBlank())
+        {
+            throw new InvalidRequestException("Password is required");
+        }
+        if(restaurantRequest.getMobile()==null || restaurantRequest.getMobile().isBlank())
+        {
+            throw new InvalidRequestException("Phone is required");
+        }
+        if(restaurantRequest.getName().length()<3)
+        {
+           throw new InvalidRequestException("Restaurant Name length should be greater than 3");
+        }
+        if(!restaurantRequest.getEmail().contains("@"))
+        {
+            throw new InvalidRequestException("Restaurant email must be valid");
+        }
+        if(restaurantRequest.getMobile().length()!=10)
+        {
+            throw new InvalidRequestException("Phone must be 10 digit");
+        }
+        String phone= restaurantRequest.getMobile();
         if(!phone.matches("^[0-9]+$"))
         {
             throw new InvalidRequestException("Phone number must be digits only");

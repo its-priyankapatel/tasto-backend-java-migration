@@ -37,6 +37,9 @@ public class FoodModel {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryModel category;
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id",nullable = false)
+    private Restaurant restaurant;
 
     public void setIsVeg(boolean isVeg)
     {

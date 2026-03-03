@@ -5,10 +5,14 @@ import com.tasto.backend.dto.FoodResponse;
 import com.tasto.backend.dto.UpdateFoodRequest;
 import com.tasto.backend.entity.CategoryModel;
 import com.tasto.backend.entity.FoodModel;
+import com.tasto.backend.entity.Restaurant;
 import com.tasto.backend.exception.InvalidRequestException;
 import com.tasto.backend.repository.CategoryRepository;
 import com.tasto.backend.repository.FoodRepository;
+import com.tasto.backend.repository.RestaurantRepository;
 import com.tasto.backend.utils.Validator;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,16 +23,27 @@ import java.util.Optional;
 public class FoodServiceImpl implements FoodService {
     private final FoodRepository foodRepository;
     private final CategoryRepository categoryRepository;
-    public FoodServiceImpl(FoodRepository foodRepository,CategoryRepository categoryRepository)
+    private final RestaurantRepository restaurantRepository;
+    public FoodServiceImpl(FoodRepository foodRepository,CategoryRepository categoryRepository,RestaurantRepository restaurantRepository)
     {
         this.foodRepository=foodRepository;
         this.categoryRepository=categoryRepository;
+        this.restaurantRepository=restaurantRepository;
     }
     @Override
     public FoodResponse addFood(FoodRequest foodRequest)
     {
         Validator.validateFoodRequest(foodRequest);
-
+        String restaurantEmail = getLoggedInUserEmail();
+        if(restaurantEmail==null)
+        {
+            throw new InvalidRequestException("Unauthorized");
+        }
+        Optional<Restaurant> isRestaurantExist = restaurantRepository.findByEmail(restaurantEmail);
+        if(!isRestaurantExist.isPresent())
+        {
+            throw new InvalidRequestException("Unauthorized");
+        }
         FoodModel food=new FoodModel();
         food.setName(foodRequest.getName());
         food.setDescription(foodRequest.getDescription());
@@ -38,6 +53,7 @@ public class FoodServiceImpl implements FoodService {
         food.setIsVeg(foodRequest.getIsVeg());
         food.setTags(foodRequest.getTags());
         food.setImage(foodRequest.getImage());
+        food.setRestaurant(isRestaurantExist.get());
 
         Optional<CategoryModel> category = categoryRepository.findByName(foodRequest.getCategory().toLowerCase());
         if(!category.isPresent())
@@ -126,5 +142,10 @@ public class FoodServiceImpl implements FoodService {
         categoryRepository.save(cat);
         foodRepository.deleteById(foodId);
         return new FoodResponse(true,"Food deleted successfully",null);
+    }
+
+    public String getLoggedInUserEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();   // This returns email
     }
 }

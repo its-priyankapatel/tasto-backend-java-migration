@@ -1,16 +1,15 @@
 package com.tasto.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
-@Table(name="user")
+@Setter
+@Getter
+@Table(name="users")
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserModel {
@@ -32,6 +31,7 @@ public class UserModel {
     public void addAddress(Address address)
     {
         addresses.add(address);
+        address.setUser(this);
     }
     public void removeAddress(Address address)
     {

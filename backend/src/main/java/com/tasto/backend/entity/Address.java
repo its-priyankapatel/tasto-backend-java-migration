@@ -1,13 +1,13 @@
 package com.tasto.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 import java.math.BigDecimal;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -16,13 +16,13 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column
+    @Column(name="full_name")
     private String fullName;
-    @Column
+    @Column(name="address_type")
     private String addressType;
-    @Column
-    private boolean isDefault;
-    @Column
+    @Column(name="default_address")
+    private boolean defaultAddress;
+    @Column(name="house_no")
     private String houseNo;
     @Column
     private String street;
@@ -30,7 +30,7 @@ public class Address {
     private String landmark;
     @Column
     private String city;
-    @Column
+    @Column(name="pin_code")
     private String pinCode;
     @Column
     private String state;
@@ -42,5 +42,6 @@ public class Address {
     private BigDecimal latitude;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",nullable = false)
+    @JsonIgnore
     private UserModel user;
 }

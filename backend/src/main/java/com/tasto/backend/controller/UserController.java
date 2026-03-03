@@ -1,5 +1,7 @@
 package com.tasto.backend.controller;
 
+import com.tasto.backend.dto.LoginUserRequest;
+import com.tasto.backend.dto.LoginUserResponse;
 import com.tasto.backend.dto.UserRequest;
 import com.tasto.backend.dto.UserResponse;
 import com.tasto.backend.repository.UserRepository;
@@ -25,5 +27,11 @@ public class UserController {
     {
         UserResponse response = userService.registerUser(userRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+    @PostMapping("login")
+    public ResponseEntity<LoginUserResponse> userLogin(@RequestBody LoginUserRequest loginUserRequest)
+    {
+        LoginUserResponse response = userService.loginUser(loginUserRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
