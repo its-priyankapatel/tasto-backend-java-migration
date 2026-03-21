@@ -1,9 +1,6 @@
 package com.tasto.backend.controller;
 
-import com.tasto.backend.dto.RestaurantLoginRequest;
-import com.tasto.backend.dto.RestaurantLoginResponse;
-import com.tasto.backend.dto.RestaurantRequest;
-import com.tasto.backend.dto.RestaurantResponse;
+import com.tasto.backend.dto.*;
 import com.tasto.backend.service.RestaurantService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,4 +38,11 @@ public class RestaurantController {
         RestaurantResponse response=restaurantService.deleteRestaurantAccount();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
+    @PatchMapping("/update-restaurant")
+    ResponseEntity<RestaurantResponse>modifyRestaurant(@RequestBody RequestUpdateRestaurant requestUpdateRestaurant)
+    {
+        RestaurantResponse response=restaurantService.updateRestaurant(requestUpdateRestaurant);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

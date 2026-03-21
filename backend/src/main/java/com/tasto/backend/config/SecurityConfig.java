@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/food/add-food").hasRole("restaurant")
                         .requestMatchers("/restaurant/deactivate").hasRole("restaurant")
                         .requestMatchers("/restaurant/get-restaurant").hasRole("user")
+                        .requestMatchers("/restaurant/update-restaurant").hasRole("restaurant")
                         .requestMatchers("/food/get-food").hasRole("user")
                         .requestMatchers("/food/update-food").hasRole("restaurant")
                         .requestMatchers("/food/delete-food").hasRole("restaurant")

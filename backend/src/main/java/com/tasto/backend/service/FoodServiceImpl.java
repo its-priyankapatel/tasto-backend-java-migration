@@ -44,6 +44,10 @@ public class FoodServiceImpl implements FoodService {
         {
             throw new InvalidRequestException("Unauthorized");
         }
+        if(!isRestaurantExist.get().isAccountActive())
+        {
+            throw new InvalidRequestException("Account is not active");
+        }
         FoodModel food=new FoodModel();
         food.setName(foodRequest.getName());
         food.setDescription(foodRequest.getDescription());
@@ -98,6 +102,16 @@ public class FoodServiceImpl implements FoodService {
     @Override
     public FoodResponse updateFood(UpdateFoodRequest updateFoodRequest)
     {
+        String email=getLoggedInUserEmail();
+        Optional<Restaurant> restaurant =restaurantRepository.findByEmail(email);
+        if(!restaurant.isPresent())
+        {
+            throw new InvalidRequestException("Restaurant does not exist");
+        }
+        if(!restaurant.get().isAccountActive())
+        {
+            throw new InvalidRequestException("Restaurant is not active");
+        }
         if(updateFoodRequest==null)
         {
           throw new InvalidRequestException("Please provide the field to update");
@@ -128,6 +142,16 @@ public class FoodServiceImpl implements FoodService {
     }
     @Override
     public FoodResponse deleteFood(Long foodId) {
+        String email=getLoggedInUserEmail();
+        Optional<Restaurant> restaurant =restaurantRepository.findByEmail(email);
+        if(!restaurant.isPresent())
+        {
+            throw new InvalidRequestException("Restaurant does not exist");
+        }
+        if(!restaurant.get().isAccountActive())
+        {
+            throw new InvalidRequestException("Restaurant is not active");
+        }
         if (foodId == null) {
             throw new InvalidRequestException("Please provide food Id");
         }

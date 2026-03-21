@@ -47,7 +47,7 @@ public class Restaurant {
     private boolean accountActive = true;
     @OneToOne(mappedBy = "restaurant",cascade = CascadeType.ALL,orphanRemoval = true)
     private RestaurantAddress addresses;
-    @OneToOne(mappedBy = "restaurant",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "restaurant",cascade = CascadeType.ALL,orphanRemoval = true)
     private List<FoodModel> foods;
     public void setAddresses(RestaurantAddress addresses)
     {

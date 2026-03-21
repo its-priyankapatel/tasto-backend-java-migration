@@ -1,9 +1,7 @@
 package com.tasto.backend.service;
 
-import com.tasto.backend.dto.RestaurantLoginRequest;
-import com.tasto.backend.dto.RestaurantLoginResponse;
-import com.tasto.backend.dto.RestaurantRequest;
-import com.tasto.backend.dto.RestaurantResponse;
+import com.tasto.backend.dto.*;
+import com.tasto.backend.entity.Address;
 import com.tasto.backend.entity.Restaurant;
 import com.tasto.backend.entity.RestaurantAddress;
 import com.tasto.backend.exception.InvalidRequestException;
@@ -121,6 +119,42 @@ public class RestaurantServiceImpl implements RestaurantService{
      restaurantRepository.save(restaurant.get());
      return new RestaurantResponse(true,"Your account has been deactivated successfully",null);
     }
+
+     @Override
+     public RestaurantResponse updateRestaurant(RequestUpdateRestaurant requestUpdateRestaurant){
+        String email = getLoggedInUserEmail();
+         Optional<Restaurant> restaurant = restaurantRepository.findByEmail(email);
+         if(!restaurant.isPresent())
+         {
+             throw new InvalidRequestException("Restaurant Does not exist");
+         }
+
+         if(!restaurant.get().isAccountActive()) {
+             throw new InvalidRequestException("Restaurant is not active");
+         }
+         restaurant.get().setName(requestUpdateRestaurant.getName());
+         restaurant.get().setDescription(requestUpdateRestaurant.getDescription());
+         restaurant.get().setMobile(requestUpdateRestaurant.getMobile());
+         restaurant.get().setRestaurantOpen(requestUpdateRestaurant.isRestaurantOpen());
+         restaurant.get().setOpeningTime(requestUpdateRestaurant.getOpeningTime());
+         restaurant.get().setClosingTime(requestUpdateRestaurant.getClosingTime());
+         restaurant.get().setTags(requestUpdateRestaurant.getTags());
+
+         RestaurantAddress address= restaurant.get().getAddresses();
+         address.setHouseNo(requestUpdateRestaurant.getAddresses().getHouseNo());
+         address.setStreet(requestUpdateRestaurant.getAddresses().getStreet());
+         address.setCity(requestUpdateRestaurant.getAddresses().getCity());
+         address.setState(requestUpdateRestaurant.getAddresses().getState());
+         address.setCountry(requestUpdateRestaurant.getAddresses().getCountry());
+         address.setLatitude(requestUpdateRestaurant.getAddresses().getLatitude());
+         address.setLongitude(requestUpdateRestaurant.getAddresses().getLongitude());
+
+         restaurant.get().setAddresses(address);
+
+          Restaurant modifyRestaurant = restaurantRepository.save(restaurant.get());
+         return new RestaurantResponse(true,"Restaurant Updated Successfully",modifyRestaurant);
+
+     }
 
     public String getLoggedInUserEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
